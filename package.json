@@ -6,6 +6,8 @@
     "url": "git://github.com/turban/snowmap.git"
   },
   "dependencies": {
-    "pngparse": "^2.0.1"
+    "png": "^3.0.3",
+    "pngparse": "^2.0.1",
+    "request": "^2.46.0"
   }
 }
