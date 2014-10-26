@@ -1,0 +1,11 @@
+{
+  "name": "snowmap",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/turban/snowmap.git"
+  },
+  "dependencies": {
+    "pngparse": "^2.0.1"
+  }
+}

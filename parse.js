@@ -1,5 +1,8 @@
 var pngparse = require("pngparse");
 
+
+
+
 pngparse.parseFile("images/2014-10-25.png", function(err, image) {
 	if (err) throw err; 
 
