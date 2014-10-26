@@ -1,7 +1,6 @@
 var pngparse = require("pngparse");
 
-
-
+var bounds = [-80000, 6445000, 1120000, 7945000];
 
 pngparse.parseFile("images/2014-10-25.png", function(err, image) {
 	if (err) throw err; 
