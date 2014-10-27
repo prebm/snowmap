@@ -16,9 +16,9 @@ map.load('styles/snowmap.xml', function (err, map) {
       if (err) throw err;
       im.encode('png', function(err, buffer) {
           if (err) throw err;
-          fs.writeFile('images/map.png', buffer, function (err) {
+          fs.writeFile('maps/map.png', buffer, function (err) {
               if (err) throw err;
-              console.log('saved map image to map.png');
+              console.log('Map saved');
           });
       });
     });

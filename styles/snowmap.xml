@@ -7,7 +7,7 @@
   </Style>  
   <Style name="hillshade style" filter-mode="first">
     <Rule>
-      <RasterSymbolizer scaling="bilinear" mode="screen" />
+      <RasterSymbolizer opacity="0.6" scaling="bilinear" mode="multiply" />
     </Rule>
   </Style> 
 
