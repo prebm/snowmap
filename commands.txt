@@ -1,0 +1,13 @@
+gdalbuildvrt utm33_10m.vrt *.dem
+
+gdalwarp -te -80000 6445000 1120000 7945000 -ts 12000 15000 -r bilinear -co compress=lzw utm33/utm33_10m.vrt utm33.tif
+
+gdaldem hillshade -combined -co compress=lzw utm33-100m.tif utm33-100m-hillshade.tif
+
+gdaldem color-relief -co compress=lzw utm33-100m.tif color-relief.txt utm33-100m-relief.tif
+
+gdalwarp -co compress=lzw -dstalpha -cutline cutline/hoyde.shp utm33-100m-hillshade.tif utm33-100m-hillshade-cut.tif
+
+gdalwarp -co compress=lzw -dstalpha -cutline cutline/hoyde.shp utm33-100m-relief.tif utm33-100m-relief-cut.tif
+
+
