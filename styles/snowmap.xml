@@ -1,0 +1,30 @@
+<Map srs="+proj=utm +zone=33 +ellps=WGS84 +datum=WGS84 +units=m +no_defs">
+
+  <Style name="relief style">
+    <Rule>
+      <RasterSymbolizer mode="normal" scaling="bilinear" />
+    </Rule>
+  </Style>  
+  <Style name="hillshade style" filter-mode="first">
+    <Rule>
+      <RasterSymbolizer scaling="bilinear" mode="screen" />
+    </Rule>
+  </Style> 
+
+  <Layer name="relief">
+    <StyleName>relief style</StyleName>
+    <Datasource>
+      <Parameter name="type">gdal</Parameter>
+      <Parameter name="file">../data/utm33-100m-relief-cut.tif</Parameter>
+    </Datasource>
+  </Layer>  
+
+  <Layer name="hillshade">
+    <StyleName>hillshade style</StyleName>
+    <Datasource>
+      <Parameter name="type">gdal</Parameter>
+      <Parameter name="file">../data/utm33-100m-hillshade-cut.tif</Parameter>
+    </Datasource>
+  </Layer>  
+
+</Map>
