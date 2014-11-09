@@ -6,7 +6,9 @@
     "url": "git://github.com/turban/snowmap.git"
   },
   "dependencies": {
+    "fs-extra": "^0.12.0",
     "mapnik": "^3.0.5",
+    "mkdirp": "^0.5.0",
     "png": "^3.0.3",
     "pngparse": "^2.0.1",
     "request": "^2.46.0"
