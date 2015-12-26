@@ -1,19 +1,50 @@
-var fs = require('fs'),
+var fs = require('fs-extra'), // https://www.npmjs.org/package/fs-extra
 	request = require('request'),
 	pngparse = require('pngparse'),
-	Png = require('png').Png;
+	Png = require('png').Png,
+	exec = require('child_process').exec;
 
-var date = '2014-11-09',
-	bounds = [-80000, 6445000, 1120000, 7945000],
+var date = '2015-03-19',
+	bounds = [-80000, 6445000, 1120000, 7945000], // 1200 x 1500 px 
 	resolution = 1000, 
 	width = (bounds[2] - bounds[0]) / resolution, 
 	height = (bounds[3] - bounds[1]) / resolution,	
-	url = 'http://arcus.nve.no/WMS_server/wms_server.aspx?&request=GetMap&service=WMS&transparent=true&format=image%2Fpng&bgcolor=0xffffff&version=1.1.1&layers=ski&styles=&TIME=' + date + '&bbox=' + bounds.join() + '&srs=EPSG%3A32633&width=' + width + '&height=' + height,
+	url = 'http://arcus.nve.no/WMS_server/wms_server.aspx?&request=GetMap&service=WMS&transparent=true&format=image%2Fpng&bgcolor=0xffffff&version=1.1.1&layers=ski&styles=&TIME=' + date + '&bbox=' + bounds.join() + '&srs=EPSG%3A32633&width=' + width + '&height=' + height;
+	console.log(url);
+
 	snow = {
 		//'510': 'Lite', // 255 + 255 + 0
 		'640': 'Våt',  // 222 + 163 + 255
 		'622': 'Tørr'  // 145 + 222 + 255
 	};
+
+function run (command, callback){
+	console.log(command);
+	exec(command, function (err, stdout, stderr) {
+		if (err) throw err;
+		if (err) throw stderr;
+		callback(stdout);
+	});
+}
+
+// Add CRS to geojson file
+function addCrs (file, callback){
+	fs.readJson(file, function(err, geojson) {
+		if (err) throw err;
+
+		geojson.crs = {
+			type: 'name',
+			properties: {
+				name: 'urn:ogc:def:crs:EPSG::32633'
+			}
+		};
+
+		fs.writeJson(file, geojson, function(err){
+			if (err) throw err;
+			callback();
+		});
+	});
+}
 
 request({ url: url, encoding: null }, function (err, response, body) {
 	if (err) throw err;
@@ -45,10 +76,17 @@ request({ url: url, encoding: null }, function (err, response, body) {
 
 		fs.writeFile('snow/' + date + '.png', png_image.toString('binary'), 'binary', function (err) {
 			if (err) throw err;
-  			//convert(date);
+
+			// Convert to pnm format supported by potrace
+			run('gdal_translate -of PNM -ot Byte snow/' + date + '.png snow/' + date + '.pnm', function(){
+
+				// Vectorize snow surface
+				run('potrace -t 1 -b geojson snow/' + date + '.pnm -o snow/' + date + '.geojson -x ' + resolution + ' -L ' + bounds[0] +' -B ' + bounds[1], function(){
+					addCrs('snow/' + date + '.geojson', function(){
+						console.log('DONE!');
+					});
+				});
+			});
 		});
-
 	});
-
-
 });
